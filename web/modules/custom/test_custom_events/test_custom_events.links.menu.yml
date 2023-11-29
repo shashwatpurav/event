@@ -1,0 +1,13 @@
+# Define the menu links for this module
+
+entity.test_custom_events_event.collection:
+  title: 'Events Listing'
+  route_name: entity.test_custom_events_event.collection
+  description: 'List Events'
+  parent: system.admin_structure
+  weight: 10
+test_custom_events_event.admin.structure.settings:
+  title: Events Settings
+  description: 'Configure Events entity'
+  route_name:  test_custom_events.event_settings
+  parent: system.admin_structure

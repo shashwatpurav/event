@@ -1,0 +1,13 @@
+# Define custom permissions for the module
+
+view event entity:
+  title: 'View Event entity'
+add event entity:
+  title: 'Add Event entity'
+edit event entity:
+  title: 'Edit Event Entity'
+delete event entity:
+  title: 'Delete Event entity'
+administer event entity:
+  title: 'Administer Event entity'
+  restrict access: TRUE
