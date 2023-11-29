@@ -1,0 +1,11 @@
+# All action links for this module
+
+test_custom_events.event_add:
+  # Which route will be called by the link
+  route_name: test_custom_events.event_add
+  title: 'Add Event'
+
+  # Where will the link appear, defined by route name.
+  appears_on:
+    - entity.test_custom_events_event.collection
+    - entity.test_custom_events_event.canonical

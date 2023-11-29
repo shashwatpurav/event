@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the test_custom_events module.
+ */
+
+use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Implements hook_install().
+ */
+function test_custom_events_install() {
+
+  // Create EventType vocabulary.
+  $vocabulary = Vocabulary::create([
+    'vid' => 'event_type',
+    'name' => 'EventType',
+    'description' => 'Event types for custom events',
+  ]);
+  $vocabulary->save();
+
+  // Add terms to the EventType vocabulary.
+  $terms = [
+    'charity' => 'Charity',
+    'sports' => 'Sports',
+    'music' => 'Music',
+  ];
+
+  foreach ($terms as $tid => $name) {
+
+    $term = Term::create([
+      'vid' => 'event_type',
+      'name' => $name,
+    ]);
+    $term->save();
+  }
+
+  // Clear the cache to reflect changes.
+  drupal_flush_all_caches();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function test_custom_events_uninstall() {
+
+  // Delete EventType vocabulary.
+  $vocabulary = Vocabulary::load('event_type');
+  if ($vocabulary) {
+    $vocabulary->delete();
+  }
+
+  // Clear the cache to reflect changes.
+  drupal_flush_all_caches();
+}

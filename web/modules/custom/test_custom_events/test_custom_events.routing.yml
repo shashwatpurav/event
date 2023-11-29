@@ -1,0 +1,57 @@
+# Route name can be used in several places; e.g. links, redirects, and local
+
+# actions.
+entity.test_custom_events_event.canonical:
+  path: '/test_custom_events_event/{test_custom_events_event}'
+  defaults:
+  # Calls the view controller, defined in the annotation of the event entity
+    _entity_view: 'test_custom_events_event'
+    _title: 'Events Content'
+  requirements:
+  # Calls the access controller of the entity, $operation 'view'
+    _entity_access: 'test_custom_events_event.view'
+
+entity.test_custom_events_event.collection:
+  path: '/test_custom_events_event/list'
+  defaults:
+  # Calls the list controller, defined in the annotation of the event entity.
+    _entity_list: 'test_custom_events_event'
+    _title: 'Events List'
+  requirements:
+  # Checks for permission directly.
+    _permission: 'administer event entity'
+
+test_custom_events.event_add:
+  path: '/test_custom_events_event/add'
+  defaults:
+  # Calls the form.add controller, defined in the event entity.
+    _entity_form: test_custom_events_event.add
+    _title: 'Add Event'
+  requirements:
+    _entity_create_access: 'test_custom_events_event'
+
+entity.test_custom_events_event.edit_form:
+  path: '/test_custom_events_event/{test_custom_events_event}/edit'
+  defaults:
+  # Calls the form.edit controller, defined in the event entity.
+    _entity_form: test_custom_events_event.edit
+    _title: 'Edit Event'
+  requirements:
+    _entity_access: 'test_custom_events_event.edit'
+
+entity.test_custom_events_event.delete_form:
+  path: '/event/{test_custom_events_event}/delete'
+  defaults:
+    # Calls the form.delete controller, defined in the event entity.
+    _entity_form: test_custom_events_event.delete
+    _title: 'Delete Event'
+  requirements:
+    _entity_access: 'test_custom_events_event.delete'
+
+test_custom_events.event_settings:
+  path: 'admin/structure/test_custom_events_event_settings'
+  defaults:
+    _form: '\Drupal\test_custom_events\Form\EventsSettingsForm'
+    _title: 'Events Settings'
+  requirements:
+    _permission: 'administer event entity'

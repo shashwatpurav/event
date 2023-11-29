@@ -1,0 +1,104 @@
+<?php
+
+/**
+ * @file
+ * Provides custom functionality for custom content entity events.
+ */
+
+ use Drupal\Core\Routing\RouteMatchInterface;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\views\ViewExecutable;
+ use Drupal\Core\Datetime\DrupalDateTime;
+
+ /**
+  * Implements hook_help().
+  */
+ function test_custom_events_help($route_name, RouteMatchInterface $route_match) {
+
+   switch ($route_name) {
+     case 'help.page.test_custom_events':
+       return '<p>' . t('This module creates EventType vocabulary, custom content "Events" entity and REST export view for Events content.') . '</p>';
+   }
+
+ }
+
+/**
+ * Implements hook_form_FORM_ID_alter() for the custom entity form.
+ */
+function test_custom_events_form_test_custom_events_event_add_form_alter(array &$form, FormStateInterface $form_state) {
+
+  // Add a custom validation handler to the date field.
+  $form['event_date']['#element_validate'][] = 'test_custom_events_validate_future_date';
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for the custom entity form.
+ */
+function test_custom_events_form_test_custom_events_event_edit_form_alter(array &$form, FormStateInterface $form_state) {
+
+  // Add a custom validation handler to the date field.
+  $form['event_date']['#element_validate'][] = 'test_custom_events_validate_future_date';
+}
+
+/**
+ * Custom validation handler to ensure the date is a future date.
+ */
+function test_custom_events_validate_future_date(array &$element, FormStateInterface $form_state, array &$complete_form) {
+
+  $dateTimeObject = $form_state->getValue('event_date')[0]['value'];
+  $date_value = $dateTimeObject->format('Y-m-d H:i:s');
+
+  if (!empty($date_value)) {
+
+    // Get the current date and time.
+    $current_datetime = new DrupalDateTime('now', 'UTC');
+
+    // Set the time to the start of the day (00:00:00).
+    $current_datetime->setTime(0, 0, 0);
+
+    // Get the timestamp.
+    $start_of_day_timestamp = $current_datetime->getTimestamp();
+
+    $selected_timestamp = strtotime($date_value);
+
+    if ($selected_timestamp <= $start_of_day_timestamp) {
+
+      $field_name = $element['widget']['#field_name'];
+
+      // Date is not a future date.
+      $form_state->setErrorByName($field_name, t('Event date must be a future date.'));
+
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ *
+ * Alter Events REST export view to display term names.
+ */
+function test_custom_events_views_pre_render(ViewExecutable $view) {
+
+  // Check if the view is the one you want to modify.
+  if ($view->id() == 'events' && $view->current_display === 'rest_export_1') {
+
+    // Loop through each row.
+    foreach ($view->result as $result) {
+
+      // Get the term reference field values.
+      $term_reference_field_1 = $result->_entity->get('event_type')->referencedEntities();
+
+      // Modify the term reference field values to display term names.
+      $term_names = [];
+      foreach ($term_reference_field_1 as $term) {
+
+        $term_names[] = $term->getName();
+      }
+
+      // Set term name to "event_type" alias.
+      $result->_entity->set('event_type', $term_names);
+
+    }
+  }
+
+}

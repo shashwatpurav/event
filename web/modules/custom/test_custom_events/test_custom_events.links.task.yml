@@ -1,0 +1,22 @@
+# Define the 'local' links for the module
+
+event.settings_tab:
+  route_name: test_custom_events.event_settings
+  title: Settings
+  base_route: test_custom_events.event_settings
+
+event.view:
+  route_name: entity.test_custom_events_event.canonical
+  base_route: entity.test_custom_events_event.canonical
+  title: View
+
+event.page_edit:
+  route_name: entity.test_custom_events_event.edit_form
+  base_route: entity.test_custom_events_event.canonical
+  title: Edit
+
+event.delete_confirm:
+  route_name:  entity.test_custom_events_event.delete_form
+  base_route:  entity.test_custom_events_event.canonical
+  title: Delete
+  weight: 10

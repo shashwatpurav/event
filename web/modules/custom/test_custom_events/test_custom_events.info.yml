@@ -1,0 +1,9 @@
+name: Test Custom Events
+type: module
+description: 'Provides Custom Content Entity - Events.'
+core_version_requirement: ^8 || ^9 || ^10
+package: Custom
+core: 10.x
+dependencies:
+  - rest
+  - serialization
